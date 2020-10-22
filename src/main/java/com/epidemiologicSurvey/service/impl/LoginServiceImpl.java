@@ -7,6 +7,8 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Lang;
 import org.nutz.lang.Strings;
 import org.nutz.lang.random.R;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 import com.alibaba.fastjson.JSONObject;
 import com.epidemiologicSurvey.bean.User;
@@ -18,8 +20,8 @@ import com.epidemiologicSurvey.utils.Toolkit;
 
 @IocBean
 public class LoginServiceImpl implements LoginService {
-	
-	//private static final Log logger = Logs.get();
+
+	private static final Log logger = Logs.get();
 
 	@Inject
 	private AccessTokenService accessTokenService;
@@ -31,8 +33,8 @@ public class LoginServiceImpl implements LoginService {
 		String userId = params.getString("userId");
 		String oldPwd = params.getString("oldPwd");
 		String newPwd = params.getString("newPwd");
-		User user =userDao.fetchUserById(userId);
-		
+		User user = userDao.fetchUserById(userId);
+
 		if (user == null) {
 			return ResponseVo.error("账号不存在！");
 		}
@@ -47,9 +49,9 @@ public class LoginServiceImpl implements LoginService {
 		}
 	}
 
-
 	@Override
 	public JSONObject login(HttpSession session, JSONObject params) {
+		logger.debug("user login: params:" + params);
 		String account = params.getString("account");
 		String password = params.getString("password");
 		String captcha = params.getString("captcha");
@@ -61,7 +63,8 @@ public class LoginServiceImpl implements LoginService {
 		if (user == null) {
 			return ResponseVo.error("用户不存在！");
 		}
-		if (!Lang.md5(password + user.getSalt()).equals(user.getPassword())) {
+		String pwd = Strings.isEmpty(user.getSalt()) ? Lang.md5(password) : Lang.md5(password + user.getSalt());
+		if (!pwd.equals(user.getPassword())) {
 			return ResponseVo.error("用户或密码不正确！");
 		}
 
@@ -77,7 +80,5 @@ public class LoginServiceImpl implements LoginService {
 		rst.put("userName", user.getName());
 		return ResponseVo.ok(rst);
 	}
-
-
 
 }
