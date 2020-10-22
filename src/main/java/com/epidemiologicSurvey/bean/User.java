@@ -11,7 +11,7 @@ import org.nutz.dao.entity.annotation.Table;
 public class User {
 
 	@Id
-	private int id;
+	private String id;
 
 	@Column("account")
 	@Comment("账号")
@@ -33,11 +33,11 @@ public class User {
 	@Comment("账号名称")
 	private String name;
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
