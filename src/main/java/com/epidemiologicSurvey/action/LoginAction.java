@@ -1,4 +1,4 @@
-package com.epidemiologicSurvey.module;
+package com.epidemiologicSurvey.action;
 
 
 import org.nutz.ioc.loader.annotation.IocBean;
@@ -6,6 +6,6 @@ import org.nutz.mvc.annotation.At;
 
 @At("/es/user")
 @IocBean
-public class UserAction {
+public class LoginAction {
  
 }
