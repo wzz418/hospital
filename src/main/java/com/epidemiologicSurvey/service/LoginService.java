@@ -21,4 +21,5 @@ public interface LoginService {
 	 * @return
 	 */
 	JSONObject updatePwd(JSONObject params);
+	
 }

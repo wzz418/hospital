@@ -38,6 +38,9 @@ public class Record {
 	@Column("city")
 	private String city;
 
+	@Column("district")
+	private String district;
+
 	@Column("address")
 	private String address;
 
@@ -115,6 +118,14 @@ public class Record {
 
 	public void setCity(String city) {
 		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 
 	public String getAddress() {

@@ -24,7 +24,11 @@ public class Question {
 	@Column("answer")
 	@Comment("答案")
 	private String answer;
-
+	
+	@Column("sequence")
+	@Comment("序号")
+	private int sequence;
+	
 	public int getId() {
 		return id;
 	}
@@ -57,4 +61,11 @@ public class Question {
 		this.answer = answer;
 	}
 
+	public int getSequence() {
+		return sequence;
+	}
+
+	public void setSequence(int sequence) {
+		this.sequence = sequence;
+	}
 }

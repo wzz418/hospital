@@ -16,8 +16,10 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 
-@IocBean
+@IocBean(create = "init")
 public class WxServiceImpl implements WxService {
+
+//	private final static Log logger = Logs.get();
 
 	@Inject
 	private PropertiesProxy conf;
@@ -27,7 +29,6 @@ public class WxServiceImpl implements WxService {
 		WxMpDefaultConfigImpl wxConfig = new WxMpDefaultConfigImpl();
 		wxConfig.setAppId(conf.get("wx.appId")); // 设置微信公众号的appid
 		wxConfig.setSecret(conf.get("wx.appSecret")); // 设置微信公众号appSerct
-		wxConfig.setToken(conf.get("wx.token"));
 		wxMpService = new WxMpServiceImpl();
 		wxMpService.setWxMpConfigStorage(wxConfig);
 	}
