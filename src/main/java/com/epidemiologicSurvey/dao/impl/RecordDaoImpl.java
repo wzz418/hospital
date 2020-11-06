@@ -73,9 +73,9 @@ public class RecordDaoImpl implements RecordDao {
 	@Override
 	public JSONObject queryPCqueryQuestionRecord( String startDate, String endDate) {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" SELECT  sum(case when q.answer='是' then 1 else 0 end) 是, sum(case when q.answer='否' then 1 else 0 end) 否,q.question  ");
+		sb.append(" SELECT  sum(case when q.answer='是' then 1 else 0 end) Y, sum(case when q.answer='否' then 1 else 0 end) F, q.`question`  ");
 		sb.append(" from ( select * from  questionrecord where createTime between @startDate and @endDate)q ");
-		sb.append(" group by q.question ");
+		sb.append(" group by q.`question` ");
 		Sql sql = Sqls.create(sb.toString());
 		sql.setParam("startDate", startDate);
 		sql.setParam("endDate", endDate);
