@@ -6,14 +6,18 @@ import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.mvc.adaptor.JsonAdaptor;
 import org.nutz.mvc.annotation.AdaptBy;
 import org.nutz.mvc.annotation.At;
+import org.nutz.mvc.annotation.By;
+import org.nutz.mvc.annotation.Filters;
 import org.nutz.mvc.annotation.Ok;
 import org.nutz.mvc.annotation.Param;
 
 import com.alibaba.fastjson.JSONObject;
+import com.epidemiologicSurvey.filter.AccessTokenFilter;
 import com.epidemiologicSurvey.service.QuestionService;
 
 @IocBean
 @At("/es/pcQuestion")
+@Filters(@By(type = AccessTokenFilter.class))
 public class QuestionPCAction {
 
 	@Inject

@@ -38,4 +38,11 @@ public interface RecordDao {
 	 * @return
 	 */
 	JSONObject queryPCqueryQuestionRecord(String startDate,String endDate);
+	/**
+	 * 查询历史记录全部信息
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
+	JSONObject queryRecord(String startDate,String endDate );
 }

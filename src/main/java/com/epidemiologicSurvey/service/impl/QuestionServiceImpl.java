@@ -95,4 +95,15 @@ public class QuestionServiceImpl implements QuestionService {
 		}
 	}
 
+	@Override
+	public JSONObject queryRecord(String startDate, String endDate) {
+		try {
+			JSONObject rst = recordDao.queryRecord(startDate, endDate);
+			return ResponseVo.ok(rst);
+		} catch (Exception e) {
+			logger.error("queryRecord error " + e.getMessage());
+			return ResponseVo.error();
+		}
+	}
+
 }

@@ -70,6 +70,7 @@ public class RecordDaoImpl implements RecordDao {
 		return rst;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public JSONObject queryPCqueryQuestionRecord( String startDate, String endDate) {
 		StringBuilder sb = new StringBuilder();
@@ -82,6 +83,29 @@ public class RecordDaoImpl implements RecordDao {
 		sql.setCallback(Sqls.callback.maps());
 		dao.execute(sql);
 		List<Map> list = sql.getList(Map.class);
+		JSONObject rst = new JSONObject();
+		rst.put("list", list);
+		return rst;
+	}
+
+	@Override
+	public JSONObject queryRecord(String startDate, String endDate) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" select r.*,qs.questionList from record r ");
+		sb.append("  left join (   ");
+	    sb.append("    select  q.recordId,  CONCAT(  '[',  GROUP_CONCAT( CONCAT( '{ \"question\":', q.question , ', \"answer\":\"', q.answer, '\" }' ) SEPARATOR ', '), ']'   ) questionList ");
+		sb.append("  from questionrecord q group by q.recordId) qs ");
+		sb.append("  on r.id = qs.recordId ");
+	     sb.append(" where r.createTime between @startDate  and @endDate ");
+		Sql sql = Sqls.create(sb.toString());
+		sql.setParam("startDate", startDate);
+		sql.setParam("endDate", endDate);
+		sql.setCallback(Sqls.callback.records());
+		dao.execute(sql);
+		List<org.nutz.dao.entity.Record> list = sql.getList(org.nutz.dao.entity.Record.class);		
+		for(org.nutz.dao.entity.Record r : list){		
+			System.out.println(r);
+		}
 		JSONObject rst = new JSONObject();
 		rst.put("list", list);
 		return rst;

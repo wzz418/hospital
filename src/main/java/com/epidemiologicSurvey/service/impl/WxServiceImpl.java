@@ -4,6 +4,8 @@ import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
 import org.nutz.lang.Strings;
+import org.nutz.log.Log;
+import org.nutz.log.Logs;
 
 import com.alibaba.fastjson.JSONObject;
 import com.epidemiologicSurvey.service.WxService;
@@ -14,12 +16,13 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
+import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 
 @IocBean(create = "init")
 public class WxServiceImpl implements WxService {
 
-//	private final static Log logger = Logs.get();
+	private final static Log logger = Logs.get();
 
 	@Inject
 	private PropertiesProxy conf;
@@ -42,10 +45,12 @@ public class WxServiceImpl implements WxService {
 		}
 		try {
 			WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxMpService.getOAuth2Service().getAccessToken(code);
-			// WxMpUser wxMpUser =
-			// wxMpService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken,
-			// null);
+			WxMpUser wxMpUser = wxMpService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, null);
+			logger.info("================================>wxMpUser:" + wxMpUser);
 			rst.put("openId", wxMpOAuth2AccessToken.getOpenId());
+			rst.put("province", wxMpUser.getProvince());
+			rst.put("city", wxMpUser.getCity());
+			rst.put("sex", wxMpUser.getSexDesc());
 			return ResponseVo.ok(rst);
 		} catch (WxErrorException e) {
 			e.printStackTrace();
