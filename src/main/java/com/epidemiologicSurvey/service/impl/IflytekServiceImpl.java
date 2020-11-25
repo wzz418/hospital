@@ -1,19 +1,18 @@
 package com.epidemiologicSurvey.service.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 import org.nutz.ioc.impl.PropertiesProxy;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
-import org.nutz.lang.Files;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 import org.nutz.mvc.upload.TempFile;
 
 import com.alibaba.fastjson.JSONObject;
 import com.epidemiologicSurvey.service.IflytekService;
+import com.epidemiologicSurvey.utils.ResponseVo;
 import com.iflytek.cloud.speech.RecognizerListener;
 import com.iflytek.cloud.speech.RecognizerResult;
 import com.iflytek.cloud.speech.SpeechConstant;
@@ -91,10 +90,10 @@ public class IflytekServiceImpl implements IflytekService {
 		}
 	}
 
-	public void RecognizePcmfileByte(TempFile tmpFile) {
+	public JSONObject RecognizePcmfileByte(TempFile tmpFile) {
 		SpeechRecognizer recognizer = SpeechRecognizer.getRecognizer();
 		recognizer.setParameter(SpeechConstant.AUDIO_SOURCE, "-1");
-		//采样率8000 需与前端配置保持一致
+		// 采样率8000 需与前端配置保持一致
 		recognizer.setParameter(SpeechConstant.SAMPLE_RATE, "8000");
 		recognizer.setParameter(SpeechConstant.RESULT_TYPE, "plain");
 		recognizer.startListening(recListener);
@@ -104,12 +103,6 @@ public class IflytekServiceImpl implements IflytekService {
 
 		try {
 			fis = new FileInputStream(tmpFile.getFile());
-			String filePath = "D:/voice";
-			File file = new File(filePath);
-			if (!file.getParentFile().exists()) {
-				file.getParentFile().mkdirs();
-			}
-			Files.copy(tmpFile.getFile(), file);
 			if (0 == fis.available()) {
 				logger.debug("==================================>no audio avaible!");
 				mResult.append("no audio avaible!");
@@ -121,13 +114,17 @@ public class IflytekServiceImpl implements IflytekService {
 					recognizer.writeAudio(buffer, 0, lenRead);
 				}
 				recognizer.stopListening();
+				while (recognizer.isListening()) {
+					//TODO 没找到更好的解决方案
+					Thread.sleep(100);
+				}
 				logger.debug("=====================>rst:" + rst.getString("result"));
-
+				return ResponseVo.ok(rst);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-
+			return ResponseVo.error("识别失败");
 		} finally {
 			try {
 				if (null != fis) {
@@ -139,6 +136,7 @@ public class IflytekServiceImpl implements IflytekService {
 
 			}
 		}
+		return ResponseVo.error("识别失败");
 
 	}
 
@@ -148,9 +146,7 @@ public class IflytekServiceImpl implements IflytekService {
 			SpeechRecognizer.createRecognizer();
 		}
 		mIsEndOfSpeech = false;
-		RecognizePcmfileByte(tmpFile);
-
-		return null;
+		return	RecognizePcmfileByte(tmpFile);
 	}
 
 }
