@@ -10,4 +10,6 @@ public interface QuestionDao {
 	 */
 	JSONObject queryQuestion();
 
+	JSONObject queryQuestionPC();
+
 }

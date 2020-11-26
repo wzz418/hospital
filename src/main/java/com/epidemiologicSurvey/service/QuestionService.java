@@ -13,6 +13,12 @@ public interface QuestionService {
 	 * @return
 	 */
 	JSONObject queryQuestion();
+	
+	/**
+	 * PC端查询问题
+	 * @return
+	 */
+	JSONObject queryQuestionPC();
 	/**
 	 * 保存问题记录
 	 * @param info

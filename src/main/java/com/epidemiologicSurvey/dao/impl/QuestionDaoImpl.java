@@ -9,6 +9,7 @@ import org.nutz.ioc.loader.annotation.IocBean;
 
 import com.alibaba.fastjson.JSONObject;
 import com.epidemiologicSurvey.bean.Question;
+import com.epidemiologicSurvey.bean.QuestionPC;
 import com.epidemiologicSurvey.dao.QuestionDao;
 import com.epidemiologicSurvey.utils.ResponseVo;
 
@@ -21,6 +22,14 @@ public class QuestionDaoImpl implements QuestionDao {
 	@Override
 	public JSONObject queryQuestion() {
 		List<Question> list = dao.query(Question.class, Cnd.NEW());
+		JSONObject rst = new JSONObject();
+		rst.put("list", list);
+		return ResponseVo.ok(rst);
+	}
+	
+	@Override
+	public JSONObject queryQuestionPC() {
+		List<QuestionPC> list = dao.query(QuestionPC.class, Cnd.NEW());
 		JSONObject rst = new JSONObject();
 		rst.put("list", list);
 		return ResponseVo.ok(rst);

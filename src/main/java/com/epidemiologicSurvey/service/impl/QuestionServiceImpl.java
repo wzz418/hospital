@@ -35,6 +35,10 @@ public class QuestionServiceImpl implements QuestionService {
 	public JSONObject queryQuestion() {
 		return questionDao.queryQuestion();
 	}
+	@Override
+	public JSONObject queryQuestionPC() {
+		return questionDao.queryQuestionPC();
+	}
 
 	@Override
 	public JSONObject saveQuestionRecord(JSONObject info, JSONArray question) {

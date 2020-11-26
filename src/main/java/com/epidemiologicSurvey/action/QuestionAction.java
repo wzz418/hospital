@@ -58,6 +58,18 @@ public class QuestionAction {
 	
 	
 	/**
+	 * PC端查询问题
+	 * @return
+	 */
+	@At("/queryQuestionPC")
+	@Ok("json")
+	@AdaptBy(type=JsonAdaptor.class)
+	public JSONObject queryQuestionPC(){
+		return questionService.queryQuestionPC();	
+	}
+	
+	
+	/**
 	 * 保存问题记录
 	 * @return
 	 */
