@@ -1,8 +1,11 @@
 package com.epidemiologicSurvey.dao.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.nutz.dao.Chain;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
@@ -24,7 +27,7 @@ public class RecordDaoImpl implements RecordDao {
 	private Dao dao;
 
 	@Override
-	public Record saveRecord(JSONObject info) {
+	public Record saveOrUpdataRecord(JSONObject info,int type) {
 		Record record = JSON.parseObject(info.toJSONString(), Record.class);
 		String area = info.getString("area");
 		String[] areas = area.split("/");
@@ -32,9 +35,17 @@ public class RecordDaoImpl implements RecordDao {
 		record.setCity(areas[1]);
 		record.setDistrict(areas[2]);
 		record.setCreateTime(Times.now());
-		dao.insert(record);
-		Record record2 = dao.fetch(Record.class, Cnd.where("openId", "=", record.getOpenId()).desc("createTime"));
-		return record2;
+		if(type == 0){
+			return dao.insert(record);			
+		}else{
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String dateNowStr = sdf.format(now); 
+			 dao.updateIgnoreNull(record);
+			 return record;
+		}
+//		Record record2 = dao.fetch(Record.class, Cnd.where("idCard","=",record.getIdCard()).desc("createTime"));
+//		 record2;
 	}
 
 	@Override
@@ -109,6 +120,12 @@ public class RecordDaoImpl implements RecordDao {
 		JSONObject rst = new JSONObject();
 		rst.put("list", list);
 		return rst;
+	}
+
+	@Override
+	public List<Record> queryRecordIdCard(String idCard, String time) {
+		 List<Record> users =dao.query(Record.class,Cnd.where("createTime","like",time+'%').and("idCard","=",idCard));
+		return users;
 	}
 
 }

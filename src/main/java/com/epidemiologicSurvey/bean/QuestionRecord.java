@@ -23,6 +23,10 @@ public class QuestionRecord {
 	@Column("answer")
 	@Comment("答案")
 	private String answer;
+	
+	@Column("inputText")
+	@Comment("输入框数据")
+	private String inputText;
 
 	@Column("recordId")
 	@Comment("记录表id")
@@ -66,6 +70,14 @@ public class QuestionRecord {
 
 	public void setRecordId(int recordId) {
 		this.recordId = recordId;
+	}
+
+	public String getInputText() {
+		return inputText;
+	}
+
+	public void setInputText(String inputText) {
+		this.inputText = inputText;
 	}
 
 }

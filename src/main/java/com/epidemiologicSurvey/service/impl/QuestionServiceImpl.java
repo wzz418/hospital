@@ -1,13 +1,17 @@
 package com.epidemiologicSurvey.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.nutz.dao.pager.Pager;
 import org.nutz.ioc.loader.annotation.Inject;
 import org.nutz.ioc.loader.annotation.IocBean;
+import org.nutz.lang.Times;
 import org.nutz.log.Log;
 import org.nutz.log.Logs;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.epidemiologicSurvey.bean.QuestionRecord;
@@ -36,17 +40,30 @@ public class QuestionServiceImpl implements QuestionService {
 		return questionDao.queryQuestion();
 	}
 	@Override
-	public JSONObject queryQuestionPC() {
-		return questionDao.queryQuestionPC();
+	public JSONObject queryQuestionPC(String str) {
+		return questionDao.queryQuestionPC(str);
 	}
 
 	@Override
 	public JSONObject saveQuestionRecord(JSONObject info, JSONArray question) {
 		logger.debug("saveQuestionRecord start info:" + info + " question:" + question);
 		try {
-			Record record = recordDao.saveRecord(info);
-			questionRecordDao.saveQuestionRecord(question, record.getId());
-			return ResponseVo.ok();
+			Record user = JSON.parseObject(info.toJSONString(), Record.class);
+			Date now = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String dateNowStr = sdf.format(now); 
+			List<Record> list = recordDao.queryRecordIdCard(user.getIdCard(),dateNowStr);
+			
+			if(list.size()==0){//新增
+				Record record = recordDao.saveOrUpdataRecord(info,0);
+				questionRecordDao.saveOrUpdataRecord(question, record.getId(),0);
+				return ResponseVo.ok();
+			}else{//修改
+				Record record = recordDao.saveOrUpdataRecord(info,1);
+				questionRecordDao.saveOrUpdataRecord(question, record.getId(),1);
+				return ResponseVo.ok();
+			}
+			
 		} catch (Exception e) {
 			logger.error("saveQuestionRecord error " + e.getMessage());
 			return ResponseVo.error();
@@ -104,6 +121,27 @@ public class QuestionServiceImpl implements QuestionService {
 		try {
 			JSONObject rst = recordDao.queryRecord(startDate, endDate);
 			return ResponseVo.ok(rst);
+		} catch (Exception e) {
+			logger.error("queryRecord error " + e.getMessage());
+			return ResponseVo.error();
+		}
+	}
+	@Override
+	public JSONObject addOrUpDataQuestionRecord(JSONObject question,String type) {
+		try {
+			questionRecordDao.addOrUpDataQuestionRecord(question,type);
+			return ResponseVo.ok();
+		} catch (Exception e) {
+			logger.error("queryRecord error " + e.getMessage());
+			return ResponseVo.error();
+		}
+	}
+	
+	@Override
+	public JSONObject delQuestion(String id) {
+		try {
+			questionRecordDao.delQuestion(id);
+			return ResponseVo.ok();
 		} catch (Exception e) {
 			logger.error("queryRecord error " + e.getMessage());
 			return ResponseVo.error();

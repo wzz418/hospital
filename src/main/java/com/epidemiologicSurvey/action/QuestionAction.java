@@ -36,7 +36,8 @@ public class QuestionAction {
 	}
 	
 	@At("/queryQuestionRecord")
-	@Ok("json")
+	@Ok("json:full")
+	
 	@AdaptBy(type=JsonAdaptor.class)
 	public JSONObject queryQuestionRecord(@Param("recordId") String recordId){
 		return questionService.queryQuestionRecord(recordId);
@@ -64,8 +65,8 @@ public class QuestionAction {
 	@At("/queryQuestionPC")
 	@Ok("json")
 	@AdaptBy(type=JsonAdaptor.class)
-	public JSONObject queryQuestionPC(){
-		return questionService.queryQuestionPC();	
+	public JSONObject queryQuestionPC(@Param("str") String str){
+		return questionService.queryQuestionPC(str);	
 	}
 	
 	
@@ -79,4 +80,28 @@ public class QuestionAction {
 	public JSONObject saveQuestionRecord(@Param("info") JSONObject info, @Param("question") JSONArray question){
 		return questionService.saveQuestionRecord(info,question);
 	}
+	
+	/**
+	 * 新增或修改PC端管理问题数据
+	 * @return
+	 */
+	@At("/addOrUpDataQuestionRecord")
+	@Ok("json")
+	@AdaptBy(type=JsonAdaptor.class)
+	public JSONObject addOrUpDataQuestionRecord(@Param("question") JSONObject question,@Param("type") String type){
+		return questionService.addOrUpDataQuestionRecord(question,type);
+	}
+	
+	/**
+	 * 新增或修改PC端管理问题数据
+	 * @return
+	 */
+	@At("/delQuestion")
+	@Ok("json")
+	@AdaptBy(type=JsonAdaptor.class)
+	public JSONObject delQuestion(@Param("id") String id){
+		return questionService.delQuestion(id);
+	}
+	
+	
 }

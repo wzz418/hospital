@@ -18,13 +18,20 @@ public interface QuestionService {
 	 * PC端查询问题
 	 * @return
 	 */
-	JSONObject queryQuestionPC();
+	JSONObject queryQuestionPC(String str);
 	/**
 	 * 保存问题记录
 	 * @param info
 	 * @param question
 	 */
 	JSONObject saveQuestionRecord(JSONObject info,JSONArray question);
+	
+	/**
+	 * 修改PC端管理问题数据
+	 * @param question
+	 * @return
+	 */
+	JSONObject addOrUpDataQuestionRecord(JSONObject question,String type);
 	/**
 	 * 查询历史记录
 	 * @param openId
@@ -60,4 +67,11 @@ public interface QuestionService {
 	 * @return
 	 */
 	JSONObject queryRecord(String startDate,String endDate);
+	
+	/***
+	 * 删除问题
+	 * @param id
+	 * @return
+	 */
+	JSONObject delQuestion(String id);
 }

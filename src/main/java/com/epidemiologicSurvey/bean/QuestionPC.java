@@ -33,6 +33,17 @@ public class QuestionPC {
 	@Comment("答案")
 	private String trueAnswer;
 	
+	@Column("inputType")
+	@Comment("0-输入框可为空，1-输入框不可为空")
+	private int inputType;
+	
+	@Column("fsfsc")
+	@Comment("0-未删，1-已删")
+	private int fsfsc;
+
+	@Column("fsfqy")
+	@Comment("0-未启用，1-已启用")
+	private int fsfqy;
 	
 	public String getTrueAnswer() {
 		return "否";
@@ -81,4 +92,29 @@ public class QuestionPC {
 	public void setSequence(int sequence) {
 		this.sequence = sequence;
 	}
+
+	public int getInputType() {
+		return inputType;
+	}
+
+	public void setInputType(int inputType) {
+		this.inputType = inputType;
+	}
+
+	public int getFsfsc() {
+		return fsfsc;
+	}
+
+	public void setFsfsc(int fsfsc) {
+		this.fsfsc = fsfsc;
+	}
+
+	public int getFsfqy() {
+		return fsfqy;
+	}
+
+	public void setFsfqy(int fsfqy) {
+		this.fsfqy = fsfqy;
+	}
+	
 }

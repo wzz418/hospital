@@ -1,5 +1,7 @@
 package com.epidemiologicSurvey.dao;
 
+import java.util.List;
+
 import org.nutz.dao.pager.Pager;
 
 import com.alibaba.fastjson.JSONObject;
@@ -8,12 +10,12 @@ import com.epidemiologicSurvey.bean.Record;
 public interface RecordDao {
 
 	/**
-	 * 保存问题记录
+	 * 保存或修改问题记录
 	 * 
 	 * @param info
 	 * @param question
 	 */
-	Record saveRecord(JSONObject info);
+	Record saveOrUpdataRecord(JSONObject info,int type);
 
 	/**
 	 * 查询历史记录
@@ -45,4 +47,12 @@ public interface RecordDao {
 	 * @return
 	 */
 	JSONObject queryRecord(String startDate,String endDate );
+	
+	/**
+	 * 查询当天该人员提交的次数
+	 * @param idCard
+	 * @param time
+	 * @return
+	 */
+	List<Record> queryRecordIdCard(String idCard,String time);
 }
