@@ -53,14 +53,20 @@ public class QuestionServiceImpl implements QuestionService {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			String dateNowStr = sdf.format(now); 
 			List<Record> list = recordDao.queryRecordIdCard(user.getIdCard(),dateNowStr);
-			
 			if(list.size()==0){//新增
 				Record record = recordDao.saveOrUpdataRecord(info,0);
 				questionRecordDao.saveOrUpdataRecord(question, record.getId(),0);
 				return ResponseVo.ok();
 			}else{//修改
-				Record record = recordDao.saveOrUpdataRecord(info,1);
-				questionRecordDao.saveOrUpdataRecord(question, record.getId(),1);
+				Record ruser = list.get(0);
+				String area = info.getString("area");
+				String[] areas = area.split("/");
+				ruser.setProvince(areas[0]);
+				ruser.setCity(areas[1]);
+				ruser.setDistrict(areas[2]);
+				JSONObject jsonObject = (JSONObject) JSONObject.toJSON(ruser);		
+				recordDao.saveOrUpdataRecord(jsonObject,1);
+				questionRecordDao.saveOrUpdataRecord(question,ruser.getId(),1);
 				return ResponseVo.ok();
 			}
 			

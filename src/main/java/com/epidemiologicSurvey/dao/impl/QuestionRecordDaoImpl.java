@@ -39,7 +39,7 @@ public class QuestionRecordDaoImpl implements QuestionRecordDao {
 				dao.insert(record);
 			}else{
 				dao.update(QuestionRecord.class,Chain.make("answer",record.getAnswer()).add("inputText",record.getInputText())
-						,Cnd.where("question","=",record.getQuestion()).and("id","=",recordId));
+						,Cnd.where("question","=",record.getQuestion()).and("recordId","=",recordId));
 				
 			}
 			

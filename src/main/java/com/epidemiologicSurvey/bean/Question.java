@@ -42,6 +42,10 @@ public class Question {
 	@Comment("0-未删，1-已删")
 	private int fsfsc;
 	
+	@Column("trueAnswer")
+	@Comment("答案")
+	private String trueAnswer;
+	
 	public int getId() {
 		return id;
 	}
@@ -104,6 +108,14 @@ public class Question {
 
 	public void setFsfqy(int fsfqy) {
 		this.fsfqy = fsfqy;
+	}
+
+	public String getTrueAnswer() {
+		return "否";
+	}
+
+	public void setTrueAnswer(String trueAnswer) {
+		this.trueAnswer = trueAnswer;
 	}
 	
 	

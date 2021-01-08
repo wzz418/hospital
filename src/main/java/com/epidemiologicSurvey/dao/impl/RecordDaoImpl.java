@@ -30,10 +30,13 @@ public class RecordDaoImpl implements RecordDao {
 	public Record saveOrUpdataRecord(JSONObject info,int type) {
 		Record record = JSON.parseObject(info.toJSONString(), Record.class);
 		String area = info.getString("area");
-		String[] areas = area.split("/");
-		record.setProvince(areas[0]);
-		record.setCity(areas[1]);
-		record.setDistrict(areas[2]);
+		if(area != null){
+			String[] areas = area.split("/");
+			record.setProvince(areas[0]);
+			record.setCity(areas[1]);
+			record.setDistrict(areas[2]);
+		}
+		
 		record.setCreateTime(Times.now());
 		if(type == 0){
 			return dao.insert(record);			
